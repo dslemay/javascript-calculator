@@ -2,11 +2,13 @@ import React from 'react';
 import '../style/App.css';
 import NumKey from './NumKey';
 import Display from './Display';
+import MathKey from './MathKey';
 
 class App extends React.Component {
   constructor() {
     super();
     this.addNum = this.addNum.bind(this);
+    this.operations = this.operations.bind(this);
 
     // Set initial started
 
@@ -24,7 +26,7 @@ class App extends React.Component {
       currVal: this.state.currVal,
       display: this.state.display
     };
-    if (this.state.currVal === undefined || this.state.currVal === "0") {
+    if (this.state.currVal === null || this.state.currVal === "0") {
       values.currVal = values.display = number;
       this.setState({...values});
     } else { // Concatenate number pressed onto current display
@@ -33,15 +35,73 @@ class App extends React.Component {
     }
   }
 
+  operations(operator) {
+    var states = {...this.state};
+    // Tests for first operation of a chain.
+    if (this.state.prevVal === null) {
+      document.getElementById(operator).classList.add('active');
+      states.operator = operator;
+      states.prevVal = this.state.currVal;
+      states.currVal = null;
+      this.setState({...states});
+    }
+
+    // Checks if no numbers have been clicked since last call of operations method to change operator used.
+    if (this.state.currVal === null) {
+      document.getElementById(this.state.operator).classList.remove('active');
+      document.getElementById(operator).classList.add('active');
+      this.setState({operator: operator});
+    }
+
+    //
+    if (this.state.prevVal && this.state.currVal !== null) {
+      document.getElementById(operator).classList.add('active');
+      var operation;
+      switch (this.state.operator) {
+        case "+":
+          operation = Number(this.state.prevVal) + Number(this.state.currVal);
+          break;
+        case "-":
+          operation = Number(this.state.prevVal) - Number(this.state.currVal);
+          break;
+        case "&times;":
+          operation = Number(this.state.prevVal) * Number(this.state.currVal);
+          break;
+        case "&divide;":
+          operation = Number(this.state.prevVal) / Number(this.state.currVal);
+          break;
+        // case "=":
+        //   operation = Number(this.state.prevVal) + Number(this.state.currVal);
+        //   break;
+      }
+      states = {
+        operator: operator,
+        currVal: null,
+        display: operation.toString(),
+        prevVal: operation.toString()
+      }
+      this.setState({...states});
+    }
+
+  }
+
   render() {
     var numKeys = [7,8,9,4,5,6,1,2,3];
+    var mathKeys = ["&divide;", "&times;", "-", "+", "="];
+    // var operators = {
+    //   "&divide;": "/",
+    //   "&times;": "*",
+    //   "-": "-",
+    //   "+": "+",
+    //   "=": "="
+    // }
 
     return (
       <div>
         <Display display={this.state.display} />
-        {
-          numKeys.map(key => <NumKey key={key} value={key.toString()} addNum={this.addNum} />)
-        }
+        {numKeys.map(key => <NumKey key={key} value={key.toString()} addNum={this.addNum} />)}
+        {mathKeys.map(key => <MathKey key={key} value={key} operations={this.operations}/>)}
+
       </div>
     );
   }
