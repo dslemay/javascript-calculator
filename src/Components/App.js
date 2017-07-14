@@ -20,17 +20,17 @@ class App extends React.Component {
 
   addNum(number) {
     // Tests for initial operations or immediately after pressing operator
-    console.log(number);
-    // if (this.state.currVal === undefined || this.state.currVal === "0") {
-    //   // var values = {currVal, display};
-    //   this.setState({
-    //     currVal: number,
-    //     display: number
-    //   });
-    // } else { // Concatenate number pressed onto current display
-    //   var currDisplay = this.state.display;
-    //
-    // }
+    var values = {
+      currVal: this.state.currVal,
+      display: this.state.display
+    };
+    if (this.state.currVal === undefined || this.state.currVal === "0") {
+      values.currVal = values.display = number;
+      this.setState({...values});
+    } else { // Concatenate number pressed onto current display
+      values.currVal = values.display = values.currVal.concat(number);
+      this.setState({...values});
+    }
   }
 
   render() {
