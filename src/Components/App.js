@@ -4,6 +4,8 @@ import NumKey from './NumKey';
 import Display from './Display';
 import MathKey from './MathKey';
 
+import { operation } from '../helpers';
+
 class App extends React.Component {
   constructor() {
     super();
@@ -33,13 +35,18 @@ class App extends React.Component {
       values.currVal = values.display = values.currVal.concat(number);
       this.setState({...values});
     }
+  // Test if there is an active MathKey. If so, remove active class.
+  var activeOperator = document.querySelector('div.active');
+  if (activeOperator !== null) {activeOperator.classList.remove('active')};
   }
 
   operations(operator) {
     var states = {...this.state};
     // Tests for first operation of a chain.
     if (this.state.prevVal === null) {
-      document.getElementById(operator).classList.add('active');
+      if (operator !== "=") {
+        document.getElementById(operator).classList.add('active'); // Equals sign is excluded from active class
+      }
       states.operator = operator;
       states.prevVal = this.state.currVal;
       states.currVal = null;
@@ -48,53 +55,44 @@ class App extends React.Component {
 
     // Checks if no numbers have been clicked since last call of operations method to change operator used.
     if (this.state.currVal === null) {
-      document.getElementById(this.state.operator).classList.remove('active');
+      var el = document.getElementById(this.state.operator);
+      if (el !== null) {
+        el.classList.remove('active');
+      }
       document.getElementById(operator).classList.add('active');
       this.setState({operator: operator});
     }
 
-    //
+    // Perform operations
+    var result;
     if (this.state.prevVal && this.state.currVal !== null) {
-      document.getElementById(operator).classList.add('active');
-      var operation;
-      switch (this.state.operator) {
-        case "+":
-          operation = Number(this.state.prevVal) + Number(this.state.currVal);
-          break;
-        case "-":
-          operation = Number(this.state.prevVal) - Number(this.state.currVal);
-          break;
-        case "&times;":
-          operation = Number(this.state.prevVal) * Number(this.state.currVal);
-          break;
-        case "&divide;":
-          operation = Number(this.state.prevVal) / Number(this.state.currVal);
-          break;
-        // case "=":
-        //   operation = Number(this.state.prevVal) + Number(this.state.currVal);
-        //   break;
+      if(operator !== "=") { // Process all operations
+        document.getElementById(operator).classList.add('active');
+        result = operation(this.state.prevVal, this.state.operator, this.state.currVal);
+        states = {
+          operator: operator,
+          currVal: null,
+          display: result,
+          prevVal: result
+        }
+        this.setState({...states});
+      } else { // Process final operations when equals is pressed
+        result = operation(this.state.prevVal, this.state.operator, this.state.currVal);
+        states = {
+          operator: null,
+          currVal: null,
+          display: result,
+          prevVal: null
+        }
+        this.setState({...states});
       }
-      states = {
-        operator: operator,
-        currVal: null,
-        display: operation.toString(),
-        prevVal: operation.toString()
-      }
-      this.setState({...states});
     }
 
   }
 
   render() {
     var numKeys = [7,8,9,4,5,6,1,2,3];
-    var mathKeys = ["&divide;", "&times;", "-", "+", "="];
-    // var operators = {
-    //   "&divide;": "/",
-    //   "&times;": "*",
-    //   "-": "-",
-    //   "+": "+",
-    //   "=": "="
-    // }
+    var mathKeys = ["\u00F7", "\u00D7", "-", "+", "="];
 
     return (
       <div>
