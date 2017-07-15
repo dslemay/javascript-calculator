@@ -72,38 +72,37 @@ class App extends React.Component {
     // Perform operations
     var result;
     if (this.state.prevVal && this.state.currVal !== null) {
-      if(operator !== "=" && operator !== "%") { // Process all operations other than equals and percentage
-        document.getElementById(operator).classList.add('active');
-        result = operation(this.state.prevVal, this.state.operator, this.state.currVal);
-        states = {
-          operator: operator,
-          currVal: null,
-          display: result,
-          prevVal: result
-        }
-        this.setState({...states});
+      switch (operator) {
+        case "%":
+          result = operation(this.state.prevVal, operator, this.state.currVal);
+          states = {
+            currVal: result,
+            display: result
+          };
+          break;
+        case "=":
+          result = operation(this.state.prevVal, this.state.operator, this.state.currVal);
+          states = {
+            operator: null,
+            currVal: null,
+            display: result,
+            prevVal: null
+          };
+          break;
+        default:
+          document.getElementById(operator).classList.add('active');
+          result = operation(this.state.prevVal, this.state.operator, this.state.currVal);
+          states = {
+            operator: operator,
+            currVal: null,
+            display: result,
+            prevVal: result
+          };
+          break;
       }
-      if (operator === "%") {
-        result = operation(this.state.prevVal, operator, this.state.currVal);
-        states = {
-          currVal: result,
-          display: result
-        }
-        this.setState({...states});
-      }
-      if (operator === "=") { // Process final operations when equals is pressed
-        result = operation(this.state.prevVal, this.state.operator, this.state.currVal);
-        states = {
-          operator: null,
-          currVal: null,
-          display: result,
-          prevVal: null
-        }
-        this.setState({...states});
-      }
+      this.setState({...states});
     }
-
-  }
+  } // End operations method
 
   render() {
     var numKeys = [7,8,9,4,5,6,1,2,3];
