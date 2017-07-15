@@ -5,6 +5,7 @@ import Display from './Display';
 import MathKey from './MathKey';
 
 import { operation } from '../helpers';
+import { percentageToDecimal } from '../helpers';
 
 class App extends React.Component {
   constructor() {
@@ -47,9 +48,14 @@ class App extends React.Component {
       if (operator !== "=") {
         document.getElementById(operator).classList.add('active'); // Equals sign is excluded from active class
       }
-      states.operator = operator;
-      states.prevVal = this.state.currVal;
-      states.currVal = null;
+      if (operator !== "%") { // Percentage performs different types of operations and stores states differently.
+        states.operator = operator;
+        states.prevVal = this.state.currVal;
+        states.currVal = null;
+      } else {
+        states.prevVal = states.display = percentageToDecimal(this.state.currVal);
+        states.currVal = null;
+      }
       this.setState({...states});
     }
 
@@ -66,7 +72,7 @@ class App extends React.Component {
     // Perform operations
     var result;
     if (this.state.prevVal && this.state.currVal !== null) {
-      if(operator !== "=") { // Process all operations
+      if(operator !== "=" && operator !== "%") { // Process all operations other than equals and percentage
         document.getElementById(operator).classList.add('active');
         result = operation(this.state.prevVal, this.state.operator, this.state.currVal);
         states = {
@@ -76,7 +82,16 @@ class App extends React.Component {
           prevVal: result
         }
         this.setState({...states});
-      } else { // Process final operations when equals is pressed
+      }
+      if (operator === "%") {
+        result = operation(this.state.prevVal, operator, this.state.currVal);
+        states = {
+          currVal: result,
+          display: result
+        }
+        this.setState({...states});
+      }
+      if (operator === "=") { // Process final operations when equals is pressed
         result = operation(this.state.prevVal, this.state.operator, this.state.currVal);
         states = {
           operator: null,
@@ -92,7 +107,7 @@ class App extends React.Component {
 
   render() {
     var numKeys = [7,8,9,4,5,6,1,2,3];
-    var mathKeys = ["\u00F7", "\u00D7", "-", "+", "="];
+    var mathKeys = ["\u00F7", "\u00D7", "%", "-", "+", "="];
 
     return (
       <div>
