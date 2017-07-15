@@ -17,7 +17,7 @@ class App extends React.Component {
 
     this.state = {
       prevVal: null,
-      currVal: "0",
+      currVal: null,
       display: "0",
       operator: null
     }
@@ -29,13 +29,22 @@ class App extends React.Component {
       currVal: this.state.currVal,
       display: this.state.display
     };
-    if (this.state.currVal === null || this.state.currVal === "0") {
+    // This code block addresses actual numbers and the decimal point excluding the plus/minus key.
+    if (this.state.currVal === null && number !== "\u00B1") {
       values.currVal = values.display = number;
-      this.setState({...values});
-    } else { // Concatenate number pressed onto current display
+    } else if (number !== "\u00B1") { // Concatenate number pressed onto current display
       values.currVal = values.display = values.currVal.concat(number);
-      this.setState({...values});
     }
+
+    // This code block addresses changing the state when the plus/minus key is selected.
+    if (this.state.currVal !== null && number === "\u00B1") {
+      if (this.state.currVal.slice(0,1) === "-") {
+        values.currVal = values.display = this.state.currVal.slice(1);
+      } else {
+        values.currVal = values.display = "-" + this.state.currVal;
+      }
+    }
+  this.setState({...values});
   // Test if there is an active MathKey. If so, remove active class.
   var activeOperator = document.querySelector('div.active');
   if (activeOperator !== null) {activeOperator.classList.remove('active')};
@@ -73,6 +82,7 @@ class App extends React.Component {
     var result;
     if (this.state.prevVal && this.state.currVal !== null) {
       switch (operator) {
+        case "\u00B1":
         case "%":
           result = operation(this.state.prevVal, operator, this.state.currVal);
           states = {
@@ -105,7 +115,7 @@ class App extends React.Component {
   } // End operations method
 
   render() {
-    var numKeys = [7,8,9,4,5,6,1,2,3];
+    var numKeys = ["\u00B1", 7,8,9,4,5,6,1,2,3];
     var mathKeys = ["\u00F7", "\u00D7", "%", "-", "+", "="];
 
     return (
