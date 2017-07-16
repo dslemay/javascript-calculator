@@ -12,6 +12,7 @@ class App extends React.Component {
     super();
     this.addNum = this.addNum.bind(this);
     this.operations = this.operations.bind(this);
+    this.clearDisplay = this.clearDisplay.bind(this);
 
     // Set initial started
 
@@ -23,25 +24,40 @@ class App extends React.Component {
     }
   }
 
+  clearDisplay() {
+    var states = {...this.state};
+    if (this.state.display !== "0") {
+      states.display = states.currVal = "0";
+    }
+    if (this.state.display === "0") {
+      states = {
+        prevVal: null,
+        currVal: null,
+        display: "0",
+        operator: null
+      }
+    }
+    this.setState({...states});
+  }
+
   addNum(number) {
     // Tests for initial operations or immediately after pressing operator
     var values = {
       currVal: this.state.currVal,
       display: this.state.display
     };
-    // This code block addresses actual numbers and the decimal point excluding the plus/minus key.
-    if (this.state.currVal === null && number !== "\u00B1") {
-      values.currVal = values.display = number;
-    } else if (number !== "\u00B1") { // Concatenate number pressed onto current display
-      values.currVal = values.display = values.currVal.concat(number);
-    }
-
-    // This code block addresses changing the state when the plus/minus key is selected.
-    if (this.state.currVal !== null && number === "\u00B1") {
-      if (this.state.currVal.slice(0,1) === "-") {
+    if (number === "\u00B1") { // This code block addresses changing the state when the plus/minus key is selected.
+      if (this.state.currVal !== null && this.state.currVal.slice(0,1) === "-") {
         values.currVal = values.display = this.state.currVal.slice(1);
-      } else {
+      }
+      if (this.state.currVal !== null && this.state.currVal.slice(0,1) !== "-") {
         values.currVal = values.display = "-" + this.state.currVal;
+      }
+    } else { // This code block addresses actual numbers and the decimal point excluding the plus/minus key
+      if (this.state.currVal === null || this.state.currVal === "0") {
+        values.currVal = values.display = number;
+      } else {
+        values.currVal = values.display = values.currVal.concat(number);
       }
     }
   this.setState({...values});
@@ -82,7 +98,6 @@ class App extends React.Component {
     var result;
     if (this.state.prevVal && this.state.currVal !== null) {
       switch (operator) {
-        case "\u00B1":
         case "%":
           result = operation(this.state.prevVal, operator, this.state.currVal);
           states = {
@@ -115,13 +130,13 @@ class App extends React.Component {
   } // End operations method
 
   render() {
-    var numKeys = ["\u00B1", 7,8,9,4,5,6,1,2,3];
+    var numKeys = ["clear", "\u00B1", 7,8,9,4,5,6,1,2,3];
     var mathKeys = ["\u00F7", "\u00D7", "%", "-", "+", "="];
 
     return (
       <div>
         <Display display={this.state.display} />
-        {numKeys.map(key => <NumKey key={key} value={key.toString()} addNum={this.addNum} />)}
+        {numKeys.map(key => <NumKey key={key} value={key.toString()} addNum={this.addNum} clearDisplay={this.clearDisplay} display={this.state.display}/>)}
         {mathKeys.map(key => <MathKey key={key} value={key} operations={this.operations}/>)}
 
       </div>
