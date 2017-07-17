@@ -1,8 +1,7 @@
 import React from 'react';
 import '../style/App.css';
-import NumKey from './NumKey';
+import Key from './Key';
 import Display from './Display';
-import MathKey from './MathKey';
 
 import { operation } from '../helpers';
 import { percentageToDecimal } from '../helpers';
@@ -14,7 +13,7 @@ class App extends React.Component {
     this.operations = this.operations.bind(this);
     this.clearDisplay = this.clearDisplay.bind(this);
 
-    // Set initial started
+    // Set initial state
 
     this.state = {
       prevVal: null,
@@ -37,6 +36,8 @@ class App extends React.Component {
         operator: null
       }
     }
+    var activeOperator = document.querySelector('div.active');
+    if (this.state.operator !== null && activeOperator !== null) {activeOperator.classList.remove('active')};
     this.setState({...states});
   }
 
@@ -129,16 +130,46 @@ class App extends React.Component {
     }
   } // End operations method
 
+
   render() {
-    var numKeys = ["clear", "\u00B1", 7,8,9,4,5,6,1,2,3];
-    var mathKeys = ["\u00F7", "\u00D7", "%", "-", "+", "="];
+    var keys = [
+      {type: "clear", value: "clear"},
+      {type: "number", value: "\u00B1"},
+      {type: "math", value: "%"},
+      {type: "math", value: "\u00D7"},
+      {type: "number", value: "7"},
+      {type: "number", value: "8"},
+      {type: "number", value: "9"},
+      {type: "math", value: "\u00F7"},
+      {type: "number", value: "4"},
+      {type: "number", value: "5"},
+      {type: "number", value: "6"},
+      {type: "math", value: "-"},
+      {type: "number", value: "1"},
+      {type: "number", value: "2"},
+      {type: "number", value: "3"},
+      {type: "math", value: "+"},
+      {type: "number", value: "0"},
+      {type: "number", value: "."},
+      {type: "math", value: "="},
+    ]
 
     return (
       <div>
         <Display display={this.state.display} />
-        {numKeys.map(key => <NumKey key={key} value={key.toString()} addNum={this.addNum} clearDisplay={this.clearDisplay} display={this.state.display}/>)}
-        {mathKeys.map(key => <MathKey key={key} value={key} operations={this.operations}/>)}
-
+        <div className="calculator-buttons">
+          {keys.map(key =>
+            <Key
+              key={key.value}
+              type={key.type}
+              value={key.value}
+              addNum={this.addNum}
+              operations={this.operations}
+              clearDisplay={this.clearDisplay}
+              display={this.state.display}
+            />
+          )}
+        </div>
       </div>
     );
   }
