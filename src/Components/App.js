@@ -112,7 +112,7 @@ class App extends React.Component {
             operator: null,
             currVal: null,
             display: result,
-            prevVal: null
+            prevVal: result
           };
           break;
         default:
