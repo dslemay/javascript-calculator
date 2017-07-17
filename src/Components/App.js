@@ -72,7 +72,7 @@ class App extends React.Component {
     // Tests for first operation of a chain.
     if (this.state.prevVal === null) {
       if (operator !== "=") {
-        document.getElementById(operator).classList.add('active'); // Equals sign is excluded from active class
+        document.getElementById("btn-" + operator).classList.add('active'); // Equals sign is excluded from active class
       }
       if (operator !== "%") { // Percentage performs different types of operations and stores states differently.
         states.operator = operator;
@@ -87,11 +87,11 @@ class App extends React.Component {
 
     // Checks if no numbers have been clicked since last call of operations method to change operator used.
     if (this.state.currVal === null) {
-      var el = document.getElementById(this.state.operator);
+      var el = document.getElementById("btn-" + this.state.operator);
       if (el !== null) {
         el.classList.remove('active');
       }
-      document.getElementById(operator).classList.add('active');
+      document.getElementById("btn-" + operator).classList.add('active');
       this.setState({operator: operator});
     }
 
@@ -116,7 +116,7 @@ class App extends React.Component {
           };
           break;
         default:
-          document.getElementById(operator).classList.add('active');
+          document.getElementById("btn-" + operator).classList.add('active');
           result = operation(this.state.prevVal, this.state.operator, this.state.currVal);
           states = {
             operator: operator,
@@ -155,7 +155,7 @@ class App extends React.Component {
     ]
 
     return (
-      <div>
+      <div className="calculator-app">
         <Display display={this.state.display} />
         <div className="calculator-buttons">
           {keys.map(key =>
