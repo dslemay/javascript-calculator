@@ -23,7 +23,7 @@ class App extends React.Component {
     }
   }
 
-  clearDisplay() {
+  clearDisplay() { // This method is called when the C/AC button is clicked.
     var states = {...this.state};
     if (this.state.display !== "0") {
       states.display = states.currVal = "0";
