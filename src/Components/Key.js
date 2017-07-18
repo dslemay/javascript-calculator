@@ -23,13 +23,30 @@ class NumKey extends React.Component {
     // Sets onClick function for button types (clear, number, math)
     switch (this.props.type) {
       case "number":
-        processFunc = () => this.props.addNum(this.props.value);
+        processFunc = () => {
+          this.props.addNum(this.props.value);
+          let keyDiv = document.getElementById('btn-' + this.props.value).classList;
+          keyDiv.add('active');
+          setTimeout(() => keyDiv.remove('active'), 300);
+        }
         break;
       case "clear":
-        processFunc = () => this.props.clearDisplay();
+        processFunc = () => {
+          this.props.clearDisplay();
+          let keyDiv = document.getElementById('btn-' + this.props.value).classList;
+          keyDiv.add('active');
+          setTimeout(() => keyDiv.remove('active'), 300);
+        }
         break;
       case "math":
-        processFunc = () => this.props.operations(this.props.value);
+        processFunc = () => {
+          this.props.operations(this.props.value);
+          if (this.props.value === "%" || "=") {
+            let keyDiv = document.getElementById('btn-' + this.props.value).classList;
+            keyDiv.add('active');
+            setTimeout(() => keyDiv.remove('active'), 300);
+          }
+        }
         break;
       default:
         throw new Error(this.props.type + " is not valid for processing onClick function of the component");
