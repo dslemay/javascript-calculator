@@ -1,0 +1,17 @@
+body {
+  background-color: #6198BF;
+}
+
+.calculator-app {
+  width: 300px;
+  background-color: #001429;
+  border-radius: 10px;
+}
+
+.calculator-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 3px 10px 10px 10px;
+  background-color: #001429;
+}
