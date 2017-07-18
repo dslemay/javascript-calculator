@@ -48,14 +48,24 @@ class App extends React.Component {
     // Tests for initial operations or immediately after pressing operator
     var values = {
       currVal: this.state.currVal,
-      display: this.state.display
+      display: this.state.display,
+      prevVal: this.state.prevVal
     };
     if (number === "\u00B1") { // This code block addresses changing the state when the plus/minus key is selected.
-      if (this.state.currVal !== null && this.state.currVal.slice(0,1) === "-") {
-        values.currVal = values.display = this.state.currVal.slice(1);
-      }
-      if (this.state.currVal !== null && this.state.currVal.slice(0,1) !== "-") {
-        values.currVal = values.display = "-" + this.state.currVal;
+      if (this.state.currVal !==null) { // Update display if currently manipulating currVal state.
+        if (this.state.currVal.slice(0,1) === "-") {
+          values.currVal = values.display = this.state.currVal.slice(1);
+        } else {
+          values.currVal = values.display = "-" + this.state.currVal;
+        }
+      } else { // Update display if currently manipulating prevVal state (ie after using equals operation)
+        if (this.state.prevVal !== null && this.state.display === this.state.prevVal) {
+          if (this.state.prevVal.slice(0,1) === "-") {
+            values.prevVal = values.display = this.state.prevVal.slice(1);
+          } else {
+            values.prevVal = values.display = "-" + this.state.prevVal;
+          }
+        }
       }
     } else { // This code block addresses actual numbers and the decimal point excluding the plus/minus key
       if (this.state.currVal === null || this.state.currVal === "0") {
@@ -64,10 +74,10 @@ class App extends React.Component {
         values.currVal = values.display = values.currVal.concat(number);
       }
     }
-  this.setState({...values});
-  // Test if there is an active MathKey. If so, remove active class.
-  var activeOperator = document.querySelector('div.active');
-  if (activeOperator !== null) {activeOperator.classList.remove('active')};
+    this.setState({...values});
+    // Test if there is an active MathKey. If so, remove active class.
+    var activeOperator = document.querySelector('div.active');
+    if (activeOperator !== null) {activeOperator.classList.remove('active')};
   }
 
   operations(operator) {
