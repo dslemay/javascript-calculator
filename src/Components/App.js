@@ -36,9 +36,12 @@ class App extends React.Component {
         operator: null
       }
     }
-    var activeOperator = document.querySelector('div.active');
-    if (this.state.operator !== null && activeOperator !== null) {activeOperator.classList.remove('active')};
     this.setState({...states});
+    var activeOperator = document.querySelector('div.active');
+    if (this.state.operator !== null) {
+      document.getElementById("btn-" + this.state.operator).classList.add('active');
+    }
+    if (states.operator === null && activeOperator !== null) {activeOperator.classList.remove('active')};
   }
 
   addNum(number) {
