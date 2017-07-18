@@ -31,6 +31,8 @@ class NumKey extends React.Component {
       case "math":
         processFunc = () => this.props.operations(this.props.value);
         break;
+      default:
+        throw new Error(this.props.type + " is not valid for processing onClick function of the component");
     }
 
     // var processFunc = this.props.value !== "clear" ? () => this.props.addNum(this.props.value) : () => this.props.clearDisplay();

@@ -16,6 +16,8 @@ export function operation(val1, operator, val2) {
     case "%":
       result = Number(val1) * (Number(val2) / 100);
       break;
+    default:
+      throw new Error(operator + " is not a programmed function.");
   }
   return result.toString();
 }
