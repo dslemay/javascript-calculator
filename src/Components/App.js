@@ -71,7 +71,7 @@ class App extends React.Component {
     var states = {...this.state};
     // Tests for first operation of a chain.
     if (this.state.prevVal === null) {
-      if (operator !== "=") {
+      if (operator !== "=" && operator !== "%") {
         document.getElementById("btn-" + operator).classList.add('active'); // Equals sign is excluded from active class
       }
       if (operator !== "%") { // Percentage performs different types of operations and stores states differently.
@@ -91,7 +91,9 @@ class App extends React.Component {
       if (el !== null) {
         el.classList.remove('active');
       }
-      document.getElementById("btn-" + operator).classList.add('active');
+      if (operator !== "=" && operator !== "%") {
+        document.getElementById("btn-" + operator).classList.add('active');
+      }
       this.setState({operator: operator});
     }
 
