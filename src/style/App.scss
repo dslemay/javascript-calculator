@@ -2,10 +2,16 @@ body {
   background-color: #6198BF;
 }
 
+#root {
+  width: 100%;
+}
+
 .calculator-app {
   width: 300px;
+  margin: 0 auto;
+  margin-top: 40px;
   background-color: #001429;
-  border-radius: 10px;
+  box-shadow: 7px 7px 10px #1F4973;
 }
 
 .calculator-buttons {
