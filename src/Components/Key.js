@@ -41,7 +41,7 @@ class NumKey extends React.Component {
       case "math":
         processFunc = () => {
           this.props.operations(this.props.value);
-          if (this.props.value === "%" || "=") {
+          if (this.props.value === "%" || this.props.value === "=") {
             let keyDiv = document.getElementById('btn-' + this.props.value).classList;
             keyDiv.add('active');
             setTimeout(() => keyDiv.remove('active'), 300);
