@@ -12,6 +12,8 @@ class App extends React.Component {
     this.addNum = this.addNum.bind(this);
     this.operations = this.operations.bind(this);
     this.clearDisplay = this.clearDisplay.bind(this);
+    this.handleKeypress = this.handleKeypress.bind(this);
+    this.handleKeydown = this.handleKeydown.bind(this);
 
     // Set initial state
 
@@ -21,6 +23,11 @@ class App extends React.Component {
       display: "0",
       operator: null
     }
+  }
+
+  componentDidMount() {
+    window.addEventListener('keypress', this.handleKeypress);
+    window.addEventListener('keydown', this.handleKeydown);
   }
 
   clearDisplay() { // This method is called when the C/AC button is clicked.
@@ -145,6 +152,38 @@ class App extends React.Component {
     }
   } // End operations method
 
+  handleKeypress(e) {
+    console.log(e);
+    var mathOptions = [37,45,43,61]
+    switch (true) {
+      case e.which >= 48 && e.which <= 57: // case statements for numbers inc numPad.
+      case e.which >= 96 && e.which <= 105:
+        this.addNum(e.key);
+        break;
+      case e.which === 42: // case for multiplication
+        this.operations("\u00D7");
+        break;
+      case e.which === 47:
+        this.operations("\u00F7");
+        break;
+      case mathOptions.indexOf(e.which) > -1: // all other math operations
+        this.operations(e.key);
+        break;
+      default:
+        console.log("Not a valid keypress");
+    }
+  }
+
+  /* The handleKeydown method is necessary for logging the escape and delete keys specifically.
+   * Not all of the keys can be run through this method, because keydown does not account for different
+   * values a key may produce when shift is pressed. Since some of the math operators are on the number keys
+   * this would create bugs.
+   */
+  handleKeydown(e) {
+    if (e.which === 27 || e.which === 8) {
+      this.clearDisplay();
+    }
+  }
 
   render() {
     var keys = [
