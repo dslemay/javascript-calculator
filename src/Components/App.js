@@ -158,17 +158,21 @@ class App extends React.Component {
 
   handleKeypress(e) {
     console.log(e);
-    var mathOptions = [37,45,43,61]
+    var mathOptions = [37,45,43,61,107,109]
     switch (true) {
       case e.which >= 48 && e.which <= 57: // case statements for numbers inc numPad.
       case e.which >= 96 && e.which <= 105:
+      case e.which === 46 || 110: // case statement for "."
         this.addNum(e.key);
         break;
-      case e.which === 42: // case for multiplication
+      case e.which === 42 || 106: // case for multiplication
         this.operations("\u00D7");
         break;
-      case e.which === 47:
+      case e.which === 47 || 111: // case for division
         this.operations("\u00F7");
+        break;
+      case e.which === 13:
+        this.operations("=");
         break;
       case mathOptions.indexOf(e.which) > -1: // all other math operations
         this.operations(e.key);
