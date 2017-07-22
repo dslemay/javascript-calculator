@@ -136,6 +136,10 @@ class App extends React.Component {
             display: result,
             prevVal: result
           };
+          let activeOperator = document.getElementById("btn-" + this.state.operator);
+          if (activeOperator !== null) {
+            activeOperator.classList.remove('active');
+          }
           break;
         default:
           document.getElementById("btn-" + operator).classList.add('active');
