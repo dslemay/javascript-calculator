@@ -5,6 +5,7 @@ import Display from './Display';
 
 import { operation } from '../helpers';
 import { percentageToDecimal } from '../helpers';
+import { scientificNotation } from '../helpers';
 
 class App extends React.Component {
   constructor() {
@@ -77,7 +78,7 @@ class App extends React.Component {
     } else { // This code block addresses actual numbers and the decimal point excluding the plus/minus key
       if (this.state.currVal === null || this.state.currVal === "0") {
         values.currVal = values.display = number;
-      } else {
+      } else if (this.state.currVal.length < 16) { // Keeps the user from overflowing the display
         values.currVal = values.display = values.currVal.concat(number);
       }
     }
@@ -152,12 +153,35 @@ class App extends React.Component {
           };
           break;
       }
+      if (states.display.search(/\+/g) > 0) { // Removes '+' symbol from default JS scientific notation
+        states.display = states.display.replace(/\+/g, '');
+      }
+      if (states.display.length > 16) { // Converts display State to Scientific notation if result is more than 16 numbers long.
+        var resultLength = states.display.length,
+        trailingZeros,
+        trailingZeroCount = 0,
+        exponents = 0,
+        scientificNotations = 0;
+        if (states.display.match(/e/g)) { // Matches existing Scientific Notations in display
+          scientificNotations = Number(states.display.match(/[0-9]+$/g)[0]);
+          states.display = states.display.match(/^[0-9.]+/g)[0];
+        } else {
+          trailingZeros = states.display.match(/0+$/g);
+          trailingZeroCount = trailingZeros === null ? 0 : trailingZeros[0].length;
+        }
+        exponents = trailingZeroCount + scientificNotations;
+        if (trailingZeros !== null) { // Scientific notation for number ending in zero(s).
+          states.display = scientificNotation(states.display.slice(0, resultLength - trailingZeroCount), exponents);
+        } else { // Scientific notation for number not neding in a zero.
+          states.display = scientificNotation(states.display, exponents);
+        }
+      }
       this.setState({...states});
-    }
+    } // End complete calculations conditional
   } // End operations method
 
   handleKeypress(e) {
-    console.log(e);
+    console.log(e.which);
     var mathOptions = [37,45,43,61,107,109]
     switch (true) {
       case e.which >= 48 && e.which <= 57: // case statements for numbers inc numPad.

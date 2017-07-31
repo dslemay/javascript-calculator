@@ -26,3 +26,15 @@ export function percentageToDecimal(value) {
   var result = Number(value) / 100;
   return result.toString();
 }
+
+export function scientificNotation(value, exponents = 0) {
+  var numLength = value.length;
+  if (numLength <= 11) {
+    return value + "e" + exponents;
+  } else {
+    let numSlice = value.slice(0,12);
+    let numRound = Number(numSlice)/10;
+    exponents += numLength - 11;
+    return numRound.toString() + "e" + exponents;
+  }
+}
