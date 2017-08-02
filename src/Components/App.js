@@ -181,25 +181,24 @@ class App extends React.Component {
   } // End operations method
 
   handleKeypress(e) {
-    console.log(e.which);
-    var mathOptions = [37,45,43,61,107,109]
+    var key = e.key,
+        numOptions = ["0","1","2","3","4","5","6","7","8","9","."],
+        mathOptions = ["%","-","+","="];
     switch (true) {
-      case e.which >= 48 && e.which <= 57: // case statements for numbers inc numPad.
-      case e.which >= 96 && e.which <= 105:
-      case e.which === 46 || 110: // case statement for "."
-        this.addNum(e.key);
+      case numOptions.indexOf(key) > -1:
+        this.addNum(key);
         break;
-      case e.which === 42 || 106: // case for multiplication
+      case key === "*":
         this.operations("\u00D7");
         break;
-      case e.which === 47 || 111: // case for division
+      case key === "/":
         this.operations("\u00F7");
         break;
-      case e.which === 13:
+      case key === "Enter" || key === "Return":
         this.operations("=");
         break;
-      case mathOptions.indexOf(e.which) > -1: // all other math operations
-        this.operations(e.key);
+      case mathOptions.indexOf(key) > -1: // all other math operations
+        this.operations(key);
         break;
       default:
         console.log("Not a valid keypress");
@@ -212,7 +211,9 @@ class App extends React.Component {
    * this would create bugs.
    */
   handleKeydown(e) {
-    if (e.which === 27 || e.which === 8) {
+    var key = e.key,
+        clearKeys = ["Escape", "Delete", "Backspace"];
+    if (clearKeys.indexOf(key) > -1) {
       this.clearDisplay();
     }
   }
