@@ -1,40 +1,40 @@
-export function operation(val1, operator, val2) {
-  var result;
+exports.operation = (val1, operator, val2) => {
+  let result;
   switch (operator) {
-    case "+":
+    case '+':
       result = Number(val1) + Number(val2);
       break;
-    case "-":
+    case '-':
       result = Number(val1) - Number(val2);
       break;
-    case "\u00D7":
+    case '\u00D7':
       result = Number(val1) * Number(val2);
       break;
-    case "\u00F7":
+    case '\u00F7':
       result = Number(val1) / Number(val2);
       break;
-    case "%":
+    case '%':
       result = Number(val1) * (Number(val2) / 100);
       break;
     default:
-      throw new Error(operator + " is not a programmed function.");
+      throw new Error(`${operator} is not a programmed function.`);
   }
   return result.toString();
-}
+};
 
-export function percentageToDecimal(value) {
-  var result = Number(value) / 100;
+exports.percentageToDecimal = value => {
+  const result = Number(value) / 100;
   return result.toString();
-}
+};
 
-export function scientificNotation(value, exponents = 0) {
-  var numLength = value.length;
+exports.scientificNotation = (value, exponents = 0) => {
+  const numLength = value.length;
+  let ePower = exponents;
   if (numLength <= 11) {
-    return value + "e" + exponents;
-  } else {
-    let numSlice = value.slice(0,12);
-    let numRound = Number(numSlice)/10;
-    exponents += numLength - 11;
-    return numRound.toString() + "e" + exponents;
+    return `${value}e${exponents}`;
   }
-}
+  const numSlice = value.slice(0, 12);
+  const numRound = Number(numSlice) / 10;
+  ePower += numLength - 11;
+  return `${numRound.toString()}e${ePower}`;
+};
