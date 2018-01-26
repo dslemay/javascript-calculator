@@ -9,55 +9,55 @@ class NumKey extends React.Component {
   }
 
   render() {
+    // eslint-disable-next-line
+    const { type, value, display, addNum, clearDisplay, operations } = this.props;
     let keyVal;
     let processFunc;
 
     // Dynamically updates clear button
-    if (this.props.value !== 'clear') {
-      keyVal = this.props.value;
+    if (value !== 'clear') {
+      keyVal = value;
     } else {
-      keyVal = this.props.display === '0' ? 'AC' : 'C';
+      keyVal = display === '0' ? 'AC' : 'C';
     }
 
     // Sets onClick function for button types (clear, number, math)
-    switch (this.props.type) {
+    switch (type) {
       case 'number':
         processFunc = () => {
-          this.props.addNum(this.props.value);
-          const keyDiv = document.getElementById(`btn-${this.props.value}`).classList;
-          keyDiv.add('active');
-          setTimeout(() => keyDiv.remove('active'), 300);
+          addNum(this.props.value);
+          const keyDiv = document.getElementById(`btn-${value}`).classList;
+          keyDiv.add('numKey-active');
+          setTimeout(() => keyDiv.remove('numKey-active'), 300);
         };
         break;
       case 'clear':
         processFunc = () => {
-          this.props.clearDisplay();
-          const keyDiv = document.getElementById(`btn-${this.props.value}`).classList;
-          keyDiv.add('active');
-          setTimeout(() => keyDiv.remove('active'), 300);
+          clearDisplay();
+          const keyDiv = document.getElementById(`btn-${value}`).classList;
+          keyDiv.add('numKey-active');
+          setTimeout(() => keyDiv.remove('numKey-active'), 300);
         };
         break;
       case 'math':
         processFunc = () => {
-          this.props.operations(this.props.value);
-          if (this.props.value === '%' || this.props.value === '=') {
-            const keyDiv = document.getElementById(`btn-${this.props.value}`).classList;
-            keyDiv.add('active');
-            setTimeout(() => keyDiv.remove('active'), 300);
+          operations(value);
+          if (value === '%' || value === '=') {
+            const keyDiv = document.getElementById(`btn-${value}`).classList;
+            keyDiv.add('numKey-active');
+            setTimeout(() => keyDiv.remove('numKey-active'), 300);
           }
         };
         break;
       default:
-        throw new Error(
-          `${this.props.type} is not valid for processing onClick function of the component`
-        );
+        throw new Error(`${type} is not valid for processing onClick function of the component`);
     }
 
     return (
       /* Keypress ESLint rules on the div are disabled here as a keyboard handler is
          declared elsewhere within the application. */
       // eslint-disable-next-line
-      <div id={`btn-${this.props.value}`} className="numKey" onClick={processFunc}>
+      <div id={`btn-${value}`} className="numKey" onClick={processFunc}>
         {keyVal}
       </div>
     );
