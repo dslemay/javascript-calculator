@@ -287,8 +287,8 @@ class App extends React.Component {
     ];
 
     return (
-      <div className="app-container">
-        <div className="calculator-app">
+      <div className="calculator-app-container">
+        <div className="calculator">
           <Display display={this.state.display} />
           <div className="calculator-buttons">
             {keys.map(key => (
