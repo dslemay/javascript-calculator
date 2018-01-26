@@ -1,17 +1,15 @@
-body {
-  background-color: #6198BF;
-}
-
-#root {
-  width: 100%;
+.app-container {
+  width: 100vw;
+  height: 100vh;
+  padding-top: 3rem;
+  background-color: #6198bf;
 }
 
 .calculator-app {
   width: 300px;
   margin: 0 auto;
-  margin-top: 40px;
   background-color: #001429;
-  box-shadow: 7px 7px 10px #1F4973;
+  box-shadow: 7px 7px 10px #1f4973;
 }
 
 .calculator-buttons {

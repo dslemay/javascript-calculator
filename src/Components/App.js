@@ -287,20 +287,22 @@ class App extends React.Component {
     ];
 
     return (
-      <div className="calculator-app">
-        <Display display={this.state.display} />
-        <div className="calculator-buttons">
-          {keys.map(key => (
-            <Key
-              key={key.value}
-              type={key.type}
-              value={key.value}
-              addNum={this.addNum}
-              operations={this.operations}
-              clearDisplay={this.clearDisplay}
-              display={this.state.display}
-            />
-          ))}
+      <div className="app-container">
+        <div className="calculator-app">
+          <Display display={this.state.display} />
+          <div className="calculator-buttons">
+            {keys.map(key => (
+              <Key
+                key={key.value}
+                type={key.type}
+                value={key.value}
+                addNum={this.addNum}
+                operations={this.operations}
+                clearDisplay={this.clearDisplay}
+                display={this.state.display}
+              />
+            ))}
+          </div>
         </div>
       </div>
     );
