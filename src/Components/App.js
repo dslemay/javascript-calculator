@@ -106,7 +106,7 @@ class App extends React.Component {
       if (this.state.currVal === null || this.state.currVal === '0') {
         states.currVal = number;
         states.display = number;
-      } else if (this.state.currVal.length < 16) {
+      } else if (this.state.currVal.length < 14) {
         // Keeps the user from overflowing the display
         states.currVal = states.currVal.concat(number);
         states.display = states.currVal.concat(number);
