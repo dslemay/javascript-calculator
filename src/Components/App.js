@@ -96,7 +96,7 @@ class App extends React.Component {
       } else if (currVal.length < 14) {
         // Keeps the user from overflowing the display
         states.currVal = states.currVal.concat(number);
-        states.display = states.currVal.concat(number);
+        states.display = states.display.concat(number);
       }
     }
     this.setState({ ...states });
