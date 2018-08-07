@@ -18,39 +18,37 @@ class App extends React.Component {
     window.addEventListener('keydown', this.handleKeydown);
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { operator: currOperator } = this.state;
+    const { operator: prevOperator } = prevState;
+    const operator = document.getElementById(`btn-${currOperator}`);
+    if (prevOperator !== currOperator && operator) {
+      operator.classList.add('numKey--active');
+    }
+  }
+
   clearDisplay = () => {
     // This method is called when the C/AC button is clicked.
-    const { currVal, display, operator } = this.state;
-    let states = { ...this.state };
-    if (currVal === null && operator === null) {
-      // Clear button resets to initial state if clicked after pressing equals.
-      states = {
-        prevVal: null,
-        currVal: null,
-        display: '0',
-        operator: null,
-      };
-    }
-    if (display !== '0') {
-      states.display = '0';
-      states.currVal = '0';
-    }
-    if (display === '0') {
-      states = {
-        prevVal: null,
-        currVal: null,
-        display: '0',
-        operator: null,
-      };
-    }
-    this.setState({ ...states });
-    const activeOperator = document.querySelector('div.active');
-    if (operator !== null) {
-      document.getElementById(`btn-${operator}`).classList.add('numKey--active');
-    }
-    if (states.operator === null && activeOperator !== null) {
-      activeOperator.classList.remove('numKey--active');
-    }
+    const initialState = {
+      prevVal: null,
+      currVal: null,
+      display: '0',
+      operator: null,
+    };
+
+    this.setState(state => {
+      const { currVal, display, operator } = state;
+      if (currVal === null && operator === null) {
+        return initialState;
+      }
+      if (display !== '0') {
+        return {
+          display: '0',
+          currVal: '0',
+        };
+      }
+      return initialState;
+    });
   };
 
   addNum = number => {
